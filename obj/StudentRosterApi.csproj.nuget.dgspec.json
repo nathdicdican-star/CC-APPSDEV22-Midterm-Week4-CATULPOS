@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Ryzen 5 5600X\\Midterm\\Week4\\Midterm\\Week4\\Midterm\\Week4\\StudentRosterApi\\Controllers\\Midterm\\Week4\\StudentRosterApi\\StudentRosterApi.csproj": {}
+    "C:\\Users\\Ryzen 5 5600X\\OneDrive\\Desktop\\Midterm\\week5\\StudentRosterApi\\StudentRosterApi.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Ryzen 5 5600X\\Midterm\\Week4\\Midterm\\Week4\\Midterm\\Week4\\StudentRosterApi\\Controllers\\Midterm\\Week4\\StudentRosterApi\\StudentRosterApi.csproj": {
+    "C:\\Users\\Ryzen 5 5600X\\OneDrive\\Desktop\\Midterm\\week5\\StudentRosterApi\\StudentRosterApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Ryzen 5 5600X\\Midterm\\Week4\\Midterm\\Week4\\Midterm\\Week4\\StudentRosterApi\\Controllers\\Midterm\\Week4\\StudentRosterApi\\StudentRosterApi.csproj",
+        "projectUniqueName": "C:\\Users\\Ryzen 5 5600X\\OneDrive\\Desktop\\Midterm\\week5\\StudentRosterApi\\StudentRosterApi.csproj",
         "projectName": "StudentRosterApi",
-        "projectPath": "C:\\Users\\Ryzen 5 5600X\\Midterm\\Week4\\Midterm\\Week4\\Midterm\\Week4\\StudentRosterApi\\Controllers\\Midterm\\Week4\\StudentRosterApi\\StudentRosterApi.csproj",
+        "projectPath": "C:\\Users\\Ryzen 5 5600X\\OneDrive\\Desktop\\Midterm\\week5\\StudentRosterApi\\StudentRosterApi.csproj",
         "packagesPath": "C:\\Users\\Ryzen 5 5600X\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Ryzen 5 5600X\\Midterm\\Week4\\Midterm\\Week4\\Midterm\\Week4\\StudentRosterApi\\Controllers\\Midterm\\Week4\\StudentRosterApi\\obj\\",
+        "outputPath": "C:\\Users\\Ryzen 5 5600X\\OneDrive\\Desktop\\Midterm\\week5\\StudentRosterApi\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Ryzen 5 5600X\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -47,6 +47,20 @@
           "targetAlias": "net10.0",
           "dependencies": {
             "Microsoft.AspNetCore.OpenApi": {
+              "target": "Package",
+              "version": "[10.0.12, )"
+            },
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[10.0.12, )"
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[10.0.12, )"
+            },
+            "Microsoft.EntityFrameworkCore.Sqlite": {
               "target": "Package",
               "version": "[10.0.12, )"
             },

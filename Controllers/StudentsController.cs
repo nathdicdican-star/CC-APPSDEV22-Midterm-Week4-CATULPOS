@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using StudentRosterApi.Data;
 using StudentRosterApi.Models;
 
 namespace StudentRosterApi.Controllers
@@ -7,29 +9,31 @@ namespace StudentRosterApi.Controllers
     [Route("api/[controller]")]
     public class StudentsController : ControllerBase
     {
-        // Simulated in-memory database
-        private static List<Student> students = new List<Student>
+        private readonly AppDbContext _context;
+
+        // Inject DbContext via Constructor
+        public StudentsController(AppDbContext context)
         {
-            new Student { Id = 1, FirstName = "Juan", LastName = "Dela Cruz", Course = "BSCS", YearLevel = 3 },
-            new Student { Id = 2, FirstName = "Maria", LastName = "Clara", Course = "BSIT", YearLevel = 2 }
-        };
+            _context = context;
+        }
 
         // GET: api/students
         [HttpGet]
-        public IActionResult GetAllStudents()
+        public async Task<IActionResult> GetAllStudents()
         {
-            return Ok(students); // Returns 200 OK
+            var students = await _context.Students.ToListAsync();
+            return Ok(students);
         }
 
         // GET: api/students/5
         [HttpGet("{id}")]
-        public IActionResult GetStudentById(int id)
+        public async Task<IActionResult> GetStudentById(int id)
         {
-            var student = students.FirstOrDefault(s => s.Id == id);
+            var student = await _context.Students.FindAsync(id);
 
             if (student == null)
             {
-                return NotFound(new { message = $"Student with ID {id} not found." }); // Returns 404
+                return NotFound(new { message = $"Student with ID {id} not found." });
             }
 
             return Ok(student);
@@ -37,69 +41,59 @@ namespace StudentRosterApi.Controllers
 
         // POST: api/students
         [HttpPost]
-        public IActionResult CreateStudent([FromBody] Student newStudent)
+        public async Task<IActionResult> CreateStudent([FromBody] Student newStudent)
         {
-            // Basic Validation
             if (string.IsNullOrWhiteSpace(newStudent.FirstName) || string.IsNullOrWhiteSpace(newStudent.LastName))
             {
-                return BadRequest(new { message = "First name and last name are required." }); // Returns 400
+                return BadRequest(new { message = "First name and last name are required." });
             }
 
-            // Auto-assign ID
-            newStudent.Id = students.Any() ? students.Max(s => s.Id) + 1 : 1;
-            students.Add(newStudent);
+            _context.Students.Add(newStudent);
+            await _context.SaveChangesAsync(); // Saves to database
 
-            // Returns 201 Created and includes the URI to the new resource
             return CreatedAtAction(nameof(GetStudentById), new { id = newStudent.Id }, newStudent);
         }
 
         // PUT: api/students/5
         [HttpPut("{id}")]
-        public IActionResult UpdateStudent(int id, [FromBody] Student updatedStudent)
+        public async Task<IActionResult> UpdateStudent(int id, [FromBody] Student updatedStudent)
         {
             if (id != updatedStudent.Id)
             {
                 return BadRequest(new { message = "ID mismatch." });
             }
 
-            var existingStudent = students.FirstOrDefault(s => s.Id == id);
+            var existingStudent = await _context.Students.FindAsync(id);
             if (existingStudent == null)
             {
                 return NotFound();
             }
 
-            // Update properties
-        existingStudent.FirstName = updatedStudent.FirstName;
-        existingStudent.LastName = updatedStudent.LastName;
-        existingStudent.Course = updatedStudent.Course;
-        existingStudent.YearLevel = updatedStudent.YearLevel;
-        existingStudent.Email = updatedStudent.Email; // Inside the PUT method
+            existingStudent.FirstName = updatedStudent.FirstName;
+            existingStudent.LastName = updatedStudent.LastName;
+            existingStudent.Email = updatedStudent.Email;
+            existingStudent.Course = updatedStudent.Course;
+            existingStudent.YearLevel = updatedStudent.YearLevel;
 
-        return NoContent();
-    }
+            await _context.SaveChangesAsync();
 
-    // DELETE: api/students/5
-    [HttpDelete("{id}")]
-    public IActionResult DeleteStudent(int id)
-    {
-        var student = students.FirstOrDefault(s => s.Id == id);
-        if (student == null)
-        {
-            return NotFound();
+            return NoContent();
         }
 
-        students.Remove(student);
-        return NoContent();
-    }
+        // DELETE: api/students/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteStudent(int id)
+        {
+            var student = await _context.Students.FindAsync(id);
+            if (student == null)
+            {
+                return NotFound();
+            }
 
-    // GET: api/students/course/BSCS
-    [HttpGet("course/{courseName}")]
-    public IActionResult GetStudentsByCourse(string courseName)
-    {
-        var filtered = students
-            .Where(s => s.Course.Equals(courseName, StringComparison.OrdinalIgnoreCase))
-            .ToList();
+            _context.Students.Remove(student);
+            await _context.SaveChangesAsync();
 
-        return Ok(filtered);}
+            return NoContent();
+        }
     }
 }
